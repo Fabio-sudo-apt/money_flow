@@ -1,50 +1,75 @@
-# React + TypeScript + Vite
+# MoneyFlow
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+My Finance é uma aplicação frontend projetada para facilitar a gestão de finanças pessoais. O projeto foi desenvolvido com tecnologias modernas, oferecendo uma interface reativa e estilizada para melhorar a experiência do usuário.
 
-Currently, two official plugins are available:
+### 🚀 Tecnologias Utilizadas
+Este projeto utiliza as seguintes tecnologias:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React: Biblioteca para criação de interfaces de usuário.
 
-## Expanding the ESLint configuration
+- React Hook Form: Gerenciamento de formulários de maneira simples e performática.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- React Router DOM: Gerenciamento de rotas na aplicação.
 
-- Configure the top-level `parserOptions` property like this:
+- Styled Components: Estilização de componentes com CSS-in-JS.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- TailwindCSS: Framework CSS para estilização rápida e responsiva.
+
+- TypeScript: Superset do JavaScript para tipagem estática.
+
+- TanStack React Table: Gerenciamento avançado de tabelas e dados tabulares.
+
+### Ferramentas de Desenvolvimento
+Vite: Ferramenta para build e desenvolvimento rápido de aplicações web.
+ESLint: Análise estática para manter a qualidade do código.
+PostCSS & Autoprefixer: Processadores CSS para compatibilidade entre navegadores.
+
+
+### 📋 Funcionalidades
+Criação, edição e exclusão de transações financeiras.
+Interface interativa para visualização de tabelas de dados.
+Validação de formulários com feedback imediato.
+Navegação intuitiva com gerenciamento de rotas.
+Estilização responsiva e altamente customizável.
+
+### 🛠️ Pré-requisitos
+Certifique-se de ter as seguintes ferramentas instaladas:
+
+Node.js (versão 18 ou superior)
+yarn para gerenciar pacotes
+
+### 📦 Instalação
+Siga os passos abaixo para rodar o projeto localmente:
+
+1. Clone este repositório:
+```bash
+git clone https://github.com/Fabio-sudo-apt/my_finance.git
+cd my_finance
+```
+2. Instale as dependências:
+```bash
+yarn install
+```
+3. Inicie o servidor de desenvolvimento:
+```bash
+yarn dev
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### 🔧 Scripts Disponíveis
+- yarn dev: Inicia o servidor de desenvolvimento.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+- yarn build: Realiza o build do projeto para produção.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- yarn preview: Exibe uma prévia do build da aplicação.
+
+- yarn lint: Executa o ESLint para análise de código.
+
+### 📄 Licença
+Este projeto está licenciado sob a MIT License.
+
+### 📧 Contato
+Fabio Souza
+
+GitHub: [https://github.com/Fabio-sudo-apt](GitHub)
+
+E-mail: souzafabiodev@gmail.com
