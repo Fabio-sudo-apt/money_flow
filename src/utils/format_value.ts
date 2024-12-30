@@ -1,4 +1,4 @@
-import { PaymentMethod } from '../types/InvoiceType';
+import { InvoiceType, PaymentMethod } from '../types/InvoiceType';
 
 export function formatValue(value: number): string {
     const formatValue = value.toFixed(2);
@@ -11,6 +11,11 @@ export function formatValue(value: number): string {
 export function formatPaymentMethod(paymentMethod: string): PaymentMethod {
     return PaymentMethod[paymentMethod as keyof typeof PaymentMethod];
 };
+
+export function formatTypeInvoice(type: string): InvoiceType {
+    return InvoiceType[type as keyof typeof InvoiceType];
+};
+
 
 export function formatDate(date: string): string {
     const parsedDate = new Date(date);

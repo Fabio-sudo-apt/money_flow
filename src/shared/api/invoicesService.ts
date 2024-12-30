@@ -8,6 +8,18 @@ class InvoiceService {
         const { invoices } = result.data;
         return invoices;
     }
+
+    async create(data: Invoice): Promise<boolean> {
+        const result = await axiosInstance.post('/invoice', {
+            description: data.description,
+            amount: data.amount,
+            date: data.date,
+            paymentMethod: data.paymentMethod,
+            type: data.type,
+        });
+        const { success } = result.data;
+        return success;
+    }
 }
 
 export default new InvoiceService;

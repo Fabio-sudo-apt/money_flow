@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, ReactNode, useCallback, useContext, useState } from 'react';
 import { Invoice, InvoiceType } from '../../../types/InvoiceType';
+import { formatTypeInvoice } from '../../../utils/format_value';
 
 interface IFinanceContextData {
     transactions: Invoice[];
@@ -42,11 +43,13 @@ export const FinanceProvider = ({ children }: IFinanceProviderProps): JSX.Elemen
     }, []);
 
     const totalIncome = transactions.reduce((acc, transaction) => {
-        return transaction.type === InvoiceType.INCOME ? acc + transaction.amount : acc;
+        const type = formatTypeInvoice(transaction.type);
+        return type === InvoiceType.INCOME ? acc + transaction.amount : acc;
     }, 0);
 
     const totalExpense = transactions.reduce((acc, transaction) => {
-        return transaction.type === InvoiceType.EXPENSE ? acc + transaction.amount : acc;
+        const type = formatTypeInvoice(transaction.type);
+        return type === InvoiceType.EXPENSE ? acc + transaction.amount : acc;
     }, 0);
 
     const total = transactions.reduce(() => {

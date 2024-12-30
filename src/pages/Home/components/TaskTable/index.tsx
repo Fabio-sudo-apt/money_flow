@@ -5,6 +5,7 @@ import { Invoice, InvoiceType } from '../../../../types/InvoiceType';
 import { columns } from '../../../../utils/dummy';
 
 import { ButtonStyle, PaginationStyle, TableStyle } from './style';
+import { formatTypeInvoice } from '../../../../utils/format_value';
 
 interface ITaskTableProps {
     data: Invoice[];
@@ -65,14 +66,14 @@ function TaskTable({ data, handleDeleteTransaction }: ITaskTableProps) {
                 </thead>
                 <tbody>
                     {table.getRowModel().rows.map(row => (
-                        <tr key={row.id} style={{ backgroundColor: row.original.type === InvoiceType.EXPENSE ? '#ff00001a' : '#00ff001a' }}>
+                        <tr key={row.id} style={{ backgroundColor: formatTypeInvoice(row.original.type) === InvoiceType.EXPENSE ? '#ff00001a' : '#00ff001a' }}>
                             {row.getVisibleCells().map(cell => (
                                 <td key={cell.id}>
                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                 </td>
                             ))}
                             <td>
-                                <ButtonStyle onClick={() => { deleteTransaction(row.original.id); }} className="delete-button">
+                                <ButtonStyle onClick={() => { if (row.original.id !== undefined) deleteTransaction(row.original.id); }} className="delete-button">
                                     <FaTrash />
                                 </ButtonStyle>
                             </td>

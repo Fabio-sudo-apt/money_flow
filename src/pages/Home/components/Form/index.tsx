@@ -1,38 +1,52 @@
+import { useFinance } from '../../../../shared/contexts/FinanceContext';
 import { Invoice, InvoiceType, PaymentMethod } from '../../../../types/InvoiceType';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Inputs } from '../../../../types/Inputs';
 import { maskCurrencyEvent } from '../../../../utils/format_value';
 import { useState } from 'react';
 import Input from './input';
+import invoicesService from '../../../../shared/api/invoicesService';
 
 interface IFormProps {
     closeModal: () => void;
-    addTransaction: (invoice: Invoice) => void;
 }
 
-function Form({ closeModal, addTransaction }: IFormProps) {
+function Form({ closeModal }: IFormProps) {
+    const { handleAddTransaction } = useFinance();
+
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const { register, handleSubmit, formState: { errors } } = useForm<Inputs>();
 
-    const handleAddTransaction = (data: Inputs) => {
+    const addTransaction = async (data: Inputs) => {
+        setLoading(true);
         const { amount, date, description, invoice_type, payment_method } = data;
 
         const value = amount.replace('R$', '').replace('.', '').replace(',', '.');
 
         const transaction: Invoice = {
-            id: Math.floor(Math.random() * 1000),
             amount: parseFloat(value),
             date: date,
             description: description,
-            payment_method: PaymentMethod[payment_method as keyof typeof PaymentMethod],
-            type: InvoiceType[invoice_type as keyof typeof InvoiceType],
+            paymentMethod: payment_method as PaymentMethod,
+            type: invoice_type as InvoiceType,
         };
 
-        addTransaction(transaction);
-        closeModal();
+        try {
+            const isTransaction = await invoicesService.create(transaction);
+            if (isTransaction) {
+                handleAddTransaction(transaction);
+                closeModal();
+            }
+        } catch {
+            setError('Ocorreu um erro ao adicionar a transação. Por favor, tente novamente.');
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const onSubmit: SubmitHandler<Inputs> = data => handleAddTransaction(data);
+    const onSubmit: SubmitHandler<Inputs> = data => addTransaction(data);
 
     const [money, setMoney] = useState('R$ 0,00');
 
@@ -43,6 +57,11 @@ function Form({ closeModal, addTransaction }: IFormProps) {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
+            {error && (
+                <div className="mb-4 text-red-500">
+                    {error}
+                </div>
+            )}
             <Input isInput id="description" register={register} label="Descrição" required errors={errors} />
             <Input isInput id="amount" value={money} register={register} label="Valor" required={false} errors={errors} handleChange={handleChange} />
             <Input isInput id="date" register={register} label="Data" type="date" required errors={errors} />
@@ -51,9 +70,12 @@ function Form({ closeModal, addTransaction }: IFormProps) {
             <div className="flex justify-end">
                 <button
                     type="submit"
-                    className="px-4 py-2 bg-blue-custom text-white rounded mr-2"
+                    className={`px-4 py-2 rounded mr-2 ${
+                        loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-custom'
+                    } text-white`}
+                    disabled={loading}
                 >
-                    Adicionar
+                    {loading ? 'Carregando...' : 'Adicionar'}
                 </button>
                 <button
                     type="button"
@@ -65,6 +87,7 @@ function Form({ closeModal, addTransaction }: IFormProps) {
             </div>
         </form>
     );
-};
+}
+
 
 export default Form;
