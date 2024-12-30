@@ -1,6 +1,6 @@
 export enum InvoiceType {
-    INCOME = 'Entrada',
-    EXPENSE = 'Despesa'
+    INCOME = 'INCOME',
+    EXPENSE = 'EXPENSE'
 }
 
 export enum PaymentMethod {
@@ -15,6 +15,6 @@ export type Invoice = {
     description: string;
     amount: number;
     date: string;
-    payment_method: PaymentMethod;
+    paymentMethod: PaymentMethod;
     type: InvoiceType;
 }

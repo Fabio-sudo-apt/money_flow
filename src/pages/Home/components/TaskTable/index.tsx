@@ -1,8 +1,8 @@
+import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { columns } from '../../../../utils/dummy';
 import { Invoice, InvoiceType } from '../../../../types/InvoiceType';
+import { columns } from '../../../../utils/dummy';
 
 import { ButtonStyle, PaginationStyle, TableStyle } from './style';
 
@@ -81,13 +81,13 @@ function TaskTable({ data, handleDeleteTransaction }: ITaskTableProps) {
                 </tbody>
             </TableStyle>
             {totalPages > 1 &&
-            <PaginationStyle>
-                <button onClick={handlePrevious} disabled={currentPage === 0}>Anterior</button>
-                <span>
-                    Pagina {currentPage + 1} de {totalPages}
-                </span>
-                <button onClick={handleNext} disabled={pagesData.length < numLimitPages}>Próximo</button>
-            </PaginationStyle>}
+                <PaginationStyle>
+                    <button onClick={handlePrevious} disabled={currentPage === 0}>Anterior</button>
+                    <span>
+                        Pagina {currentPage + 1} de {totalPages}
+                    </span>
+                    <button onClick={handleNext} disabled={pagesData.length < numLimitPages}>Próximo</button>
+                </PaginationStyle>}
         </>
 
     );

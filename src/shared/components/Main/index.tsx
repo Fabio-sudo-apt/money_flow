@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
+import invoicesService from '../../api/invoicesService';
 import { useFinance } from '../../contexts/FinanceContext';
 import { MainStyle } from './style';
-import { data } from '../../../utils/dummy';
 
 
 interface MainProps {
@@ -11,10 +11,14 @@ interface MainProps {
 function Main({ children }: MainProps) {
     const { handleTransactions } = useFinance();
 
+    const fetchData = useCallback(async () => {
+        const result = await invoicesService.getAll();
+        handleTransactions(result);
+    }, [handleTransactions]);
 
     useEffect(() => {
-        handleTransactions(data);
-    }, [handleTransactions]);
+        fetchData();
+    }, [fetchData]);
 
     return (
         <MainStyle>

@@ -1,9 +1,9 @@
 
 import Column from '../types/ColumnType';
 import { Invoice } from '../types/InvoiceType';
-import { formatValue, formatDate } from './format_value';
+import { formatValue, formatDate, formatPaymentMethod } from './format_value';
 
-const data: Invoice[] = [];
+// const data: Invoice[] = [];
 
 
 const columns: Column<Invoice>[] = [
@@ -19,8 +19,8 @@ const columns: Column<Invoice>[] = [
   },
   {
     header: 'Forma de pagamento',
-    accessorKey: 'payment_method',
-    cell: (props) => <p>{props.getValue()}</p>,
+    accessorKey: 'paymentMethod',
+    cell: (props) => <p>{formatPaymentMethod(props.getValue())}</p>,
   },
   {
     header: 'Data',
@@ -29,4 +29,4 @@ const columns: Column<Invoice>[] = [
   },
 ];
 
-export { data, columns };
+export { columns };

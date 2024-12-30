@@ -24,7 +24,7 @@ function Home() {
             amount: invoice.amount,
             date: invoice.date,
             description: invoice.description,
-            payment_method: invoice.payment_method,
+            paymentMethod: invoice.paymentMethod,
             type: invoice.type,
         };
         handleAddTransaction(transaction);

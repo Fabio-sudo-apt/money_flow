@@ -1,3 +1,5 @@
+import { PaymentMethod } from '../types/InvoiceType';
+
 export function formatValue(value: number): string {
     const formatValue = value.toFixed(2);
     const valueText = formatValue.replace('.', ',');
@@ -6,8 +8,15 @@ export function formatValue(value: number): string {
     return `R$ ${parts.join(',')}`;
 }
 
+export function formatPaymentMethod(paymentMethod: string): PaymentMethod {
+    return PaymentMethod[paymentMethod as keyof typeof PaymentMethod];
+};
+
 export function formatDate(date: string): string {
-    const [year, month, day] = date.split('-');
+    const parsedDate = new Date(date);
+    const day = String(parsedDate.getUTCDate()).padStart(2, '0');
+    const month = String(parsedDate.getUTCMonth() + 1).padStart(2, '0'); // Janeiro é 0
+    const year = parsedDate.getUTCFullYear();
     return `${day}/${month}/${year}`;
 }
 
