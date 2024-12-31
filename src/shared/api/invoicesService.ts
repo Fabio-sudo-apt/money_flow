@@ -9,7 +9,7 @@ class InvoiceService {
         return invoices;
     }
 
-    async create(data: Invoice): Promise<boolean> {
+    async create(data: Invoice): Promise<{ success: boolean, invoice: Invoice }> {
         const result = await axiosInstance.post('/invoice', {
             description: data.description,
             amount: data.amount,
@@ -17,8 +17,13 @@ class InvoiceService {
             paymentMethod: data.paymentMethod,
             type: data.type,
         });
-        const { success } = result.data;
-        return success;
+        const { success, invoice } = result.data;
+        return { success, invoice };
+    }
+
+    async delete(id: number): Promise<boolean> {
+        const result = await axiosInstance.delete(`/invoice/${id}`);
+        return result.status >= 200 && result.status < 300;
     }
 }
 

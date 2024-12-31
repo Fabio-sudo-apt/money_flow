@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import invoicesService from '../../api/invoicesService';
+import InvoicesService from '../../api/invoicesService';
 import { useFinance } from '../../contexts/FinanceContext';
 import { MainStyle } from './style';
 
@@ -12,7 +12,7 @@ function Main({ children }: MainProps) {
     const { handleTransactions } = useFinance();
 
     const fetchData = useCallback(async () => {
-        const result = await invoicesService.getAll();
+        const result = await InvoicesService.getAll();
         handleTransactions(result);
     }, [handleTransactions]);
 

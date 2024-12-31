@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { color_primary, color_white } from '../../themes/colors';
 
 const SectionStyle = styled.section`
@@ -40,7 +40,24 @@ const SpanStyle = styled.span`
     font-weight: 600;
     font-size: 1rem;
 `;
-export {
-  SpanStyle, ButtonAddStyle,
-  SectionStyle, ContainerStyle
-};
+
+const spin = keyframes`
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+`;
+
+export const Loader = styled.div`
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid ${color_primary};
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    animation: ${spin} 1s linear infinite;
+`;
+
+export { ButtonAddStyle, ContainerStyle, SectionStyle, SpanStyle };
+

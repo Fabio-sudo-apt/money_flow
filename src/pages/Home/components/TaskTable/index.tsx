@@ -4,8 +4,10 @@ import { FaTrash } from 'react-icons/fa';
 import { Invoice, InvoiceType } from '../../../../types/InvoiceType';
 import { columns } from '../../../../utils/dummy';
 
-import { ButtonStyle, PaginationStyle, TableStyle } from './style';
+import { ButtonStyle, PaginationStyle, TableStyle, TextNotFound } from './style';
 import { formatTypeInvoice } from '../../../../utils/format_value';
+import InvoicesService from '../../../../shared/api/invoicesService';
+import { Loader } from '../../style';
 
 interface ITaskTableProps {
     data: Invoice[];
@@ -16,6 +18,7 @@ function TaskTable({ data, handleDeleteTransaction }: ITaskTableProps) {
 
     const numLimitPages = 4;
     const [currentPage, setCurrentPage] = useState(0);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const colomns = useMemo(() => {
         return columns;
@@ -39,8 +42,24 @@ function TaskTable({ data, handleDeleteTransaction }: ITaskTableProps) {
         setCurrentPage(currentPage + 1 === totalPages ? 0 : currentPage + 1);
     };
 
-    const deleteTransaction = (id: number) => {
-        handleDeleteTransaction(id);
+    const handleDelete = (id?: number) => {
+        if (id !== undefined) {
+            deleteTransaction(id);
+        }
+    };
+
+    const deleteTransaction = async (id: number) => {
+        setLoading(true);
+        try {
+            const isTransaction = await InvoicesService.delete(id);
+            if (isTransaction) {
+                handleDeleteTransaction(id);
+            }
+        } catch (error) {
+            console.error('Erro ao deletar a transação:', error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const table = useReactTable({
@@ -50,47 +69,56 @@ function TaskTable({ data, handleDeleteTransaction }: ITaskTableProps) {
     });
 
     return (
-        <>
-            <TableStyle>
-                <thead>
-                    {table.getHeaderGroups().map(headersGroup => (
-                        <tr key={headersGroup.id}>
-                            {headersGroup.headers.map(header => (
-                                <th key={header.id}>
-                                    {header.column.columnDef.header!.toString()}
-                                </th>
-                            ))}
-                            <th></th>
-                        </tr>
-                    ))}
-                </thead>
-                <tbody>
-                    {table.getRowModel().rows.map(row => (
-                        <tr key={row.id} style={{ backgroundColor: formatTypeInvoice(row.original.type) === InvoiceType.EXPENSE ? '#ff00001a' : '#00ff001a' }}>
-                            {row.getVisibleCells().map(cell => (
-                                <td key={cell.id}>
-                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        data.length > 0 ?
+            <>
+                <TableStyle>
+                    <thead>
+                        {table.getHeaderGroups().map(headersGroup => (
+                            <tr key={headersGroup.id}>
+                                {headersGroup.headers.map(header => (
+                                    <th key={header.id}>
+                                        {header.column.columnDef.header!.toString()}
+                                    </th>
+                                ))}
+                                <th></th>
+                            </tr>
+                        ))}
+                    </thead>
+                    <tbody>
+                        {table.getRowModel().rows.map(row => (
+                            <tr key={row.id} style={{ backgroundColor: formatTypeInvoice(row.original.type) === InvoiceType.EXPENSE ? '#ff00001a' : '#00ff001a' }}>
+                                {row.getVisibleCells().map(cell => (
+                                    <td key={cell.id}>
+                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    </td>
+                                ))}
+                                <td>
+                                    <ButtonStyle
+                                        onClick={() => handleDelete(row.original.id)}
+                                        disabled={loading}
+                                    >
+                                        {loading ? (
+                                            <Loader />
+                                        ) : (
+                                            <FaTrash />
+                                        )}
+                                    </ButtonStyle>
                                 </td>
-                            ))}
-                            <td>
-                                <ButtonStyle onClick={() => { if (row.original.id !== undefined) deleteTransaction(row.original.id); }} className="delete-button">
-                                    <FaTrash />
-                                </ButtonStyle>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </TableStyle>
-            {totalPages > 1 &&
-                <PaginationStyle>
-                    <button onClick={handlePrevious} disabled={currentPage === 0}>Anterior</button>
-                    <span>
-                        Pagina {currentPage + 1} de {totalPages}
-                    </span>
-                    <button onClick={handleNext} disabled={pagesData.length < numLimitPages}>Próximo</button>
-                </PaginationStyle>}
-        </>
-
+                            </tr>
+                        ))}
+                    </tbody>
+                </TableStyle>
+                {totalPages > 1 &&
+                        <PaginationStyle>
+                            <button onClick={handlePrevious} disabled={currentPage === 0}>Anterior</button>
+                            <span>
+                                Pagina {currentPage + 1} de {totalPages}
+                            </span>
+                            <button onClick={handleNext} disabled={pagesData.length < numLimitPages}>Próximo</button>
+                        </PaginationStyle>
+                    }
+            </>
+            : <TextNotFound>Nenhuma transação cadastrada</TextNotFound>
     );
 };
 

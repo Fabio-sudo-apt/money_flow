@@ -36,7 +36,7 @@ function Home() {
                 </ContainerStyle>
             </SectionStyle>
             {isOpen && <SectionStyle>
-                <Model closeModal={closeModal}/>
+                <Model closeModal={closeModal} />
             </SectionStyle>}
         </>
     );

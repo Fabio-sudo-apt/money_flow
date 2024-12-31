@@ -70,18 +70,28 @@ export const PaginationStyle = styled.div`
     }
 `;
 
-export const ButtonStyle = styled.button`
+export const ButtonStyle = styled.button<{ disabled?: boolean }>`
     padding: 10px;
     border: none;
     border-radius: 5px;
     background-color: transparent;
-    color: ${color_red};
+    color: ${({ disabled }) => (disabled ? '#ccc' : color_red)};
     font-weight: 600;
     font-size: 1rem;
-    cursor: pointer;
+    cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
 
     &:hover {
-        background-color: ${color_red};
-        color: ${color_white};
+        background-color: ${({ disabled }) => (disabled ? 'transparent' : color_red)};
+        color: ${({ disabled }) => (disabled ? '#ccc' : color_white)};
     }
+`;
+
+
+export const TextNotFound = styled.h2`
+    text-align: center;
+    margin: 10px;
 `;

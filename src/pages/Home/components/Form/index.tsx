@@ -5,7 +5,8 @@ import { Inputs } from '../../../../types/Inputs';
 import { maskCurrencyEvent } from '../../../../utils/format_value';
 import { useState } from 'react';
 import Input from './input';
-import invoicesService from '../../../../shared/api/invoicesService';
+import InvoicesService from '../../../../shared/api/invoicesService';
+import { Loader } from '../../style';
 
 interface IFormProps {
     closeModal: () => void;
@@ -34,9 +35,9 @@ function Form({ closeModal }: IFormProps) {
         };
 
         try {
-            const isTransaction = await invoicesService.create(transaction);
-            if (isTransaction) {
-                handleAddTransaction(transaction);
+            const { success, invoice } = await InvoicesService.create(transaction);
+            if (success) {
+                handleAddTransaction({ ...transaction, id: invoice.id });
                 closeModal();
             }
         } catch {
@@ -70,12 +71,10 @@ function Form({ closeModal }: IFormProps) {
             <div className="flex justify-end">
                 <button
                     type="submit"
-                    className={`px-4 py-2 rounded mr-2 ${
-                        loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-custom'
-                    } text-white`}
+                    className={'px-4 py-2 rounded mr-2 bg-blue-custom text-white'}
                     disabled={loading}
                 >
-                    {loading ? 'Carregando...' : 'Adicionar'}
+                    {loading ? <Loader /> : 'Adicionar'}
                 </button>
                 <button
                     type="button"
