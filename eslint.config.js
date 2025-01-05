@@ -30,6 +30,7 @@ export default tseslint.config(
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'no-trailing-spaces': 'error',
       'key-spacing': ['error', { beforeColon: false, afterColon: true }],
+      '@typescript-eslint/no-explicit-any': 'off',
     },
   },
 );

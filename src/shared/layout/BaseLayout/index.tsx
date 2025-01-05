@@ -1,4 +1,4 @@
-import { Header, Main, Footer } from '../../components';
+import { Footer, Header, Main } from '../../components';
 import { FinanceProvider } from '../../contexts/FinanceContext';
 
 import { BaseLauyoutStyle } from './style';

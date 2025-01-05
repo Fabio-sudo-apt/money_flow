@@ -1,12 +1,13 @@
-import { useFinance } from '../../../../shared/contexts/FinanceContext';
-import { Invoice, InvoiceType, PaymentMethod } from '../../../../types/InvoiceType';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { Inputs } from '../../../../types/Inputs';
-import { maskCurrencyEvent } from '../../../../utils/format_value';
 import { useState } from 'react';
-import Input from './input';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import InvoicesService from '../../../../shared/api/invoicesService';
+import { useFinance } from '../../../../shared/contexts/FinanceContext';
+import { Inputs } from '../../../../types/Inputs';
+import { Invoice, InvoiceType, PaymentMethod } from '../../../../types/InvoiceType';
+import { maskCurrencyEvent } from '../../../../utils/format_value';
+import { getLocalStorage } from '../../../../utils/localStorage';
 import { Loader } from '../../style';
+import Input from './input';
 
 interface IFormProps {
     closeModal: () => void;
@@ -35,7 +36,8 @@ function Form({ closeModal }: IFormProps) {
         };
 
         try {
-            const { success, invoice } = await InvoicesService.create(transaction);
+            const token = getLocalStorage('token');
+            const { success, invoice } = await InvoicesService.create(transaction, token);
             if (success) {
                 handleAddTransaction({ ...transaction, id: invoice.id });
                 closeModal();

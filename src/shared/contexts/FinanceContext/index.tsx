@@ -1,18 +1,20 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, ReactNode, useCallback, useContext, useState } from 'react';
+import { createContext, ReactNode, useCallback, useContext, useMemo, useState } from 'react';
 import { Invoice, InvoiceType } from '../../../types/InvoiceType';
 import { formatTypeInvoice } from '../../../utils/format_value';
+import { getLocalStorage } from '../../../utils/localStorage';
+import InvoicesService from '../../api/invoicesService';
+
 
 interface IFinanceContextData {
     transactions: Invoice[];
-    handleTransactions: (transactions: Invoice[]) => void;
+    handleTransactions: () => void;
 
     totalIncome: number;
     totalExpense: number;
     total: number;
 
     handleAddTransaction: (transaction: Invoice) => void;
-
     handleDeleteTransaction: (id: number) => void;
 };
 
@@ -34,40 +36,49 @@ export const useFinance = () => {
     return useContext(FinanceContext);
 };
 
-
 export const FinanceProvider = ({ children }: IFinanceProviderProps): JSX.Element => {
     const [transactions, setTransactions] = useState<Invoice[]>([]);
 
-    const handleTransactions = useCallback((transactions: Invoice[]) => {
-        setTransactions(transactions);
+    const handleTransactions = useCallback(async () => {
+        const token = getLocalStorage('token');
+        const result = await InvoicesService.getAll(token);
+        setTransactions(result);
     }, []);
 
-    const totalIncome = transactions.reduce((acc, transaction) => {
-        const type = formatTypeInvoice(transaction.type);
-        return type === InvoiceType.INCOME ? acc + transaction.amount : acc;
-    }, 0);
+    const totalIncome = useMemo(() => {
+        return transactions.reduce((acc, transaction) => {
+            const type = formatTypeInvoice(transaction.type);
+            return type === InvoiceType.INCOME ? acc + transaction.amount : acc;
+        }, 0);
+    }, [transactions]);
 
-    const totalExpense = transactions.reduce((acc, transaction) => {
-        const type = formatTypeInvoice(transaction.type);
-        return type === InvoiceType.EXPENSE ? acc + transaction.amount : acc;
-    }, 0);
+    const totalExpense = useMemo(() => {
+        return transactions.reduce((acc, transaction) => {
+            const type = formatTypeInvoice(transaction.type);
+            return type === InvoiceType.EXPENSE ? acc + transaction.amount : acc;
+        }, 0);
+    }, [transactions]);
 
-    const total = transactions.reduce(() => {
-        return totalIncome - totalExpense;
-    }, 0);
+    const total = useMemo(() => totalIncome - totalExpense, [totalIncome, totalExpense]);
 
     const handleAddTransaction = useCallback((transaction: Invoice) => {
-        setTransactions([...transactions, transaction]);
-    }, [transactions]);
+        setTransactions((prevTransactions) => [...prevTransactions, transaction]);
+    }, []);
 
     const handleDeleteTransaction = useCallback((id: number) => {
-        const newTransactions = transactions.filter(transaction => transaction.id !== id);
-        setTransactions(newTransactions);
-    }, [transactions]);
-
+        setTransactions((prevTransactions) => prevTransactions.filter(transaction => transaction.id !== id));
+    }, []);
 
     return (
-        <FinanceContext.Provider value={{ transactions, handleTransactions, totalIncome, totalExpense, total, handleAddTransaction, handleDeleteTransaction }}>
+        <FinanceContext.Provider value={{
+            transactions,
+            handleTransactions,
+            totalIncome,
+            totalExpense,
+            total,
+            handleAddTransaction,
+            handleDeleteTransaction
+        }}>
             {children}
         </FinanceContext.Provider>
     );

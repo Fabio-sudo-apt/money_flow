@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaBrazilianRealSign, FaCircleArrowDown, FaCircleArrowUp } from 'react-icons/fa6';
 import { IoAddCircle } from 'react-icons/io5';
 import { useFinance } from '../../shared/contexts/FinanceContext';
@@ -6,16 +6,23 @@ import { color_primary, color_red, color_white } from '../../themes/colors';
 import Card from './components/Card';
 import Model from './components/Modal';
 import TaskTable from './components/TaskTable';
-import { ButtonAddStyle, ContainerStyle, SectionStyle, SpanStyle } from './style';
+import { ButtonAddStyle, ContainerStyle, LoaderTable, SectionStyle, SpanStyle } from './style';
 
 function Home() {
-    const { transactions, totalIncome, totalExpense, total, handleDeleteTransaction } = useFinance();
+    const { transactions, totalIncome, totalExpense, total, handleDeleteTransaction, handleTransactions } = useFinance();
 
     const [isOpen, setOpenModel] = useState(false);
+
+    const [loading, setLoading] = useState(false);
 
     const openModal = () => setOpenModel(true);
 
     const closeModal = () => setOpenModel(false);
+
+    useEffect(() => {
+        handleTransactions();
+        setLoading(false);
+    }, [handleTransactions]);
 
     return (
         <>
@@ -32,7 +39,7 @@ function Home() {
                             <SpanStyle>Nova Transação</SpanStyle>
                         </ButtonAddStyle>
                     </div>
-                    <TaskTable data={transactions} handleDeleteTransaction={handleDeleteTransaction} />
+                    {loading ? <LoaderTable /> : <TaskTable data={transactions} handleDeleteTransaction={handleDeleteTransaction} />}
                 </ContainerStyle>
             </SectionStyle>
             {isOpen && <SectionStyle>

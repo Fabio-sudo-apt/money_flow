@@ -2,12 +2,13 @@ import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-tabl
 import { useMemo, useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 import { Invoice, InvoiceType } from '../../../../types/InvoiceType';
-import { columns } from '../../../../utils/dummy';
+import { columns } from './columns';
 
 import { ButtonStyle, PaginationStyle, TableStyle, TextNotFound } from './style';
 import { formatTypeInvoice } from '../../../../utils/format_value';
 import InvoicesService from '../../../../shared/api/invoicesService';
 import { Loader } from '../../style';
+import { getLocalStorage } from '../../../../utils/localStorage';
 
 interface ITaskTableProps {
     data: Invoice[];
@@ -51,7 +52,8 @@ function TaskTable({ data, handleDeleteTransaction }: ITaskTableProps) {
     const deleteTransaction = async (id: number) => {
         setLoading(true);
         try {
-            const isTransaction = await InvoicesService.delete(id);
+            const token = getLocalStorage('token');
+            const isTransaction = await InvoicesService.delete(id, token);
             if (isTransaction) {
                 handleDeleteTransaction(id);
             }

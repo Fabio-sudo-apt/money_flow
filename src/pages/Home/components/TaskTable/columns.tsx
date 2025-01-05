@@ -1,9 +1,6 @@
-
-import Column from '../types/ColumnType';
-import { Invoice } from '../types/InvoiceType';
-import { formatValue, formatDate, formatPaymentMethod } from './format_value';
-
-// const data: Invoice[] = [];
+import Column from '../../../../types/ColumnType';
+import { Invoice } from '../../../../types/InvoiceType';
+import { formatValue, formatDate, formatPaymentMethod } from '../../../../utils/format_value';
 
 
 const columns: Column<Invoice>[] = [

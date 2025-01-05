@@ -59,5 +59,15 @@ export const Loader = styled.div`
     animation: ${spin} 1s linear infinite;
 `;
 
+export const LoaderTable = styled.div`
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid ${color_primary};
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: ${spin} 1s linear infinite;
+    margin: 20px auto; 
+`;
+
 export { ButtonAddStyle, ContainerStyle, SectionStyle, SpanStyle };
 
