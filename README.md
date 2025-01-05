@@ -1,6 +1,6 @@
 # MoneyFlow
 
-My Finance é uma aplicação frontend projetada para facilitar a gestão de finanças pessoais. O projeto foi desenvolvido com tecnologias modernas, oferecendo uma interface reativa e estilizada para melhorar a experiência do usuário.
+MoneyFlow é uma aplicação frontend projetada para facilitar a gestão de finanças pessoais. O projeto foi desenvolvido com tecnologias modernas, oferecendo uma interface reativa e estilizada para melhorar a experiência do usuário.
 
 ### 🚀 Tecnologias Utilizadas
 Este projeto utiliza as seguintes tecnologias:
