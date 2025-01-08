@@ -5,7 +5,6 @@ import { useFinance } from '../../../../shared/contexts/FinanceContext';
 import { Inputs } from '../../../../types/Inputs';
 import { Invoice, InvoiceType, PaymentMethod } from '../../../../types/InvoiceType';
 import { maskCurrencyEvent } from '../../../../utils/format_value';
-import { getLocalStorage } from '../../../../utils/localStorage';
 import { Loader } from '../../style';
 import Input from './input';
 
@@ -36,8 +35,7 @@ function Form({ closeModal }: IFormProps) {
         };
 
         try {
-            const token = getLocalStorage('token');
-            const { success, invoice } = await InvoicesService.create(transaction, token);
+            const { success, invoice } = await InvoicesService.create(transaction);
             if (success) {
                 handleAddTransaction({ ...transaction, id: invoice.id });
                 closeModal();

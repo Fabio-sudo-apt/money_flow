@@ -4,11 +4,10 @@ import { FaTrash } from 'react-icons/fa';
 import { Invoice, InvoiceType } from '../../../../types/InvoiceType';
 import { columns } from './columns';
 
-import { ButtonStyle, PaginationStyle, TableStyle, TextNotFound } from './style';
-import { formatTypeInvoice } from '../../../../utils/format_value';
 import InvoicesService from '../../../../shared/api/invoicesService';
+import { formatTypeInvoice } from '../../../../utils/format_value';
 import { Loader } from '../../style';
-import { getLocalStorage } from '../../../../utils/localStorage';
+import { ButtonStyle, PaginationStyle, TableStyle, TextNotFound } from './style';
 
 interface ITaskTableProps {
     data: Invoice[];
@@ -52,8 +51,7 @@ function TaskTable({ data, handleDeleteTransaction }: ITaskTableProps) {
     const deleteTransaction = async (id: number) => {
         setLoading(true);
         try {
-            const token = getLocalStorage('token');
-            const isTransaction = await InvoicesService.delete(id, token);
+            const isTransaction = await InvoicesService.delete(id);
             if (isTransaction) {
                 handleDeleteTransaction(id);
             }
