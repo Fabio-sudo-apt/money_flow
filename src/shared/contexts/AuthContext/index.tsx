@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 import { User } from '../../../types/UserType';
-import { getLocalStorage, setLocalStorage, removeLocalStorage } from '../../../utils/localStorage';
+import { getLocalStorage } from '../../../utils/localStorage';
 import InvoicesService from '../../api/invoicesService';
 
 interface IAuthContextData {
@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }: IAuthProviderProps): JSX.Element => {
         const token = getLocalStorage('token');
         if (token) {
             try {
-                const { success, user } = await InvoicesService.verifyToken(token);
+                const { success, user } = await InvoicesService.verifyToken();
                 if (success && user) {
                     setUser(user);
                 }
@@ -51,12 +51,7 @@ export const AuthProvider = ({ children }: IAuthProviderProps): JSX.Element => {
         const response = await InvoicesService.loginRequest(email, password);
 
         if (response.success && response.user) {
-            const { token } = response;
-            const user = { ...response.user, token };
-            setUser(user);
-            if (token) {
-                setLocalStorage('token', token);
-            }
+            setUser(response.user);
         } else {
             throw { errors: response.errors ?? ['Erro ao realizar login'] };
         }
@@ -64,7 +59,6 @@ export const AuthProvider = ({ children }: IAuthProviderProps): JSX.Element => {
 
     function handleUserLogout() {
         setUser(null);
-        removeLocalStorage('token');
     }
 
     return (

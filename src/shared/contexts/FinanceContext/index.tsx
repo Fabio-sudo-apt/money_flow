@@ -2,7 +2,6 @@
 import { createContext, ReactNode, useCallback, useContext, useMemo, useState } from 'react';
 import { Invoice, InvoiceType } from '../../../types/InvoiceType';
 import { formatTypeInvoice } from '../../../utils/format_value';
-import { getLocalStorage } from '../../../utils/localStorage';
 import InvoicesService from '../../api/invoicesService';
 
 
@@ -40,8 +39,7 @@ export const FinanceProvider = ({ children }: IFinanceProviderProps): JSX.Elemen
     const [transactions, setTransactions] = useState<Invoice[]>([]);
 
     const handleTransactions = useCallback(async () => {
-        const token = getLocalStorage('token');
-        const result = await InvoicesService.getAll(token);
+        const result = await InvoicesService.getAll();
         setTransactions(result);
     }, []);
 
