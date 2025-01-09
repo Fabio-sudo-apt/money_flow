@@ -9,7 +9,7 @@ import { ButtonAddStyle } from './style';
 
 function SignIn() {
     const navigate = useNavigate();
-    const { handleUserAuth, user } = useAuth();
+    const { user, handleUserAuth } = useAuth();
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const [loading, setLoading] = useState(false);
@@ -26,7 +26,7 @@ function SignIn() {
             navigate('/home');
 
         } catch (error: any) {
-            setErrorMessages(error?.errors ?? ['Erro ao realizar login']);
+            setErrorMessages(error.errors);
         } finally {
             setLoading(false);
         }

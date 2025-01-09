@@ -8,5 +8,6 @@ export type User = {
 export type UserResponse = {
     success?: boolean;
     user?: User | null;
+    token?: string;
     errors?: string[];
 }

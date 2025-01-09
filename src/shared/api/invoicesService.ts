@@ -7,17 +7,16 @@ class InvoiceService {
     async loginRequest(email: string, password: string): Promise<UserResponse> {
         try {
             const response = await axiosInstance.post('/user/auth', { email, password });
-            const { success, user } = response.data;
-            return { success, user };
+            const { success, user, token } = response.data;
+            return { success, user, token };
         } catch (error: unknown) {
-            const defaultErrorMessage = 'Ocorreu um erro inesperado. Tente novamente mais tarde.';
-            let errorMessage = defaultErrorMessage;
+            const defaultErrorMessage = 'Erro ao autenticar. Verifique seus dados e tente novamente.';
+            let errorMessages: string[] = [defaultErrorMessage];
 
             if (axios.isAxiosError(error)) {
-                errorMessage = error.response?.data?.errors?.join(', ') || error.message || defaultErrorMessage;
+                errorMessages = error.response?.data?.errors || [error.message] || [defaultErrorMessage];
             }
-
-            return { success: false, errors: [errorMessage] };
+            throw { errors: errorMessages };
         }
     }
 
